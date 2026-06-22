@@ -1,0 +1,22 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build and Run TaaviOS",
+            "type": "shell",
+            "command": "nasm -f bin bootloader.asm -o bootloader.bin; nasm -f bin kernel.asm -o kernel.bin; cmd /c copy /b bootloader.bin+kernel.bin os.bin; python build.py; qemu-system-i386 -drive format=raw,file=os.bin,if=ide,media=disk,index=0 -drive format=raw,file=creds.bin,if=ide,media=disk,index=1",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Fresh Build (wipes saved account)",
+            "type": "shell",
+            "command": "python -c \"open('creds.bin','wb').write(bytes(512))\"; nasm -f bin bootloader.asm -o bootloader.bin; nasm -f bin kernel.asm -o kernel.bin; cmd /c copy /b bootloader.bin+kernel.bin os.bin; python build.py; qemu-system-i386 -drive format=raw,file=os.bin,if=ide,media=disk,index=0 -drive format=raw,file=creds.bin,if=ide,media=disk,index=1",
+            "group": "build",
+            "problemMatcher": []
+        }
+    ]
+}
